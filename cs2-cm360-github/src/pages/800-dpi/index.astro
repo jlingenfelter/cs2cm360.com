@@ -1,0 +1,53 @@
+---
+import Base from '../../layouts/Base.astro';
+import Calculator from '../../components/Calculator.astro';
+import { SENS_VALUES, DPI_VALUES, calcCm360, formatSens, formatCm360, getPageUrl, getHubUrl } from '../../lib/data';
+
+const dpi = 800;
+const breadcrumbs = [
+  { label: 'Home', href: '/' },
+  { label: '800 DPI' },
+];
+---
+
+<Base
+  title="CS2 cm360 Calculator 800 DPI – Sensitivity to cm/360 Chart"
+  description="Calculate your CS2 cm/360 at 800 DPI. Full sensitivity chart from 0.40 to 2.50 with cm/360 values, classifications, and direct links to every setting."
+  breadcrumbs={breadcrumbs}
+>
+  <h1>CS2 cm/360 Calculator – 800 DPI</h1>
+  <p>Calculate your cm per 360 at 800 DPI using the calculator below. Browse the full sensitivity chart to find your exact setting and see the resulting cm/360.</p>
+
+  <Calculator defaultSens={1.0} defaultDpi={800} />
+
+  <h2>800 DPI Sensitivity to cm/360 Chart</h2>
+  <p>Every sensitivity from 0.40 to 2.50 at 800 DPI with the resulting cm/360:</p>
+
+  <div class="sens-grid">
+    {SENS_VALUES.map(s => (
+      <a href={getPageUrl(dpi, s)}>
+        {formatSens(s)} sens → {formatCm360(s, dpi)} cm
+      </a>
+    ))}
+  </div>
+
+  <h2>Why 800 DPI Is the Standard for CS2</h2>
+  <p>800 DPI is the most widely used mouse DPI among competitive CS2 players. It has become the default recommendation for new players and the baseline that most professional teams build their settings around. Modern gaming mice are optimised to deliver clean, accurate tracking at 800 DPI, making it an excellent all-round choice.</p>
+  <p>At 800 DPI, the sensitivity values that produce competitive cm/360 ranges are intuitive and easy to work with. A sensitivity of <a href={getPageUrl(800, 1.0)}>1.00 gives a cm/360 of {formatCm360(1.0, 800)} cm</a>, which is right in the heart of the balanced zone. The competitive range of roughly 25 to 50 cm/360 spans sensitivities from about <a href={getPageUrl(800, 0.70)}>0.70</a> to <a href={getPageUrl(800, 2.00)}>2.00</a>, giving you plenty of room to find your personal sweet spot without needing extreme values.</p>
+  <p>Another benefit of 800 DPI is desktop comfort. Unlike 400 DPI, which many players find too slow for Windows navigation, 800 DPI provides a natural cursor speed for everyday computing. This means you do not need to switch DPI profiles between gaming and general use, eliminating one potential source of confusion.</p>
+
+  <h3>Typical 800 DPI Sensitivities for CS2</h3>
+  <p>Professional players at 800 DPI typically use sensitivities between 0.70 and 1.30, producing cm/360 values from approximately {formatCm360(1.3, 800)} to {formatCm360(0.7, 800)} cm. The most popular settings cluster around <a href={getPageUrl(800, 0.90)}>0.90</a> to <a href={getPageUrl(800, 1.10)}>1.10</a> sensitivity, which gives a cm/360 in the low to mid 30s — the sweet spot for most riflers.</p>
+  <p>If you are starting out at 800 DPI, begin with <a href={getPageUrl(800, 1.0)}>1.00 sensitivity ({formatCm360(1.0, 800)} cm/360)</a> and adjust by 0.05 increments until your aim feels comfortable. Moving from 1.00 to 0.95 or 1.05 changes your cm/360 by roughly 1.5 to 2 cm, which is enough to feel a subtle difference without disrupting your muscle memory.</p>
+
+  <h2>cm/360 Ranges at 800 DPI</h2>
+  <p>At 800 DPI, sensitivities above about 1.45 produce a cm/360 below 25 cm, putting you in the fast category. The balanced zone of 25 to 45 cm spans sensitivities from roughly 0.80 to 1.45. Sensitivities below 0.80 push your cm/360 above 45 cm into precision territory. This range covers the entire spectrum of competitive play.</p>
+
+  <h2>Other DPI Settings</h2>
+  <div class="sens-grid">
+    {DPI_VALUES.filter(d => d !== dpi).map(d => (
+      <a href={getHubUrl(d)}>View {d} DPI settings →</a>
+    ))}
+    <a href="/cm360-chart/">Full cm/360 Chart →</a>
+  </div>
+</Base>

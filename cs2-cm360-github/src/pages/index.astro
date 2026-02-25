@@ -1,0 +1,83 @@
+---
+import Base from '../layouts/Base.astro';
+import Calculator from '../components/Calculator.astro';
+import { DPI_VALUES, SENS_VALUES, calcCm360, calcEdpi, formatSens, formatCm360, getPageUrl, getHubUrl } from '../lib/data';
+---
+
+<Base
+  title="CS2 cm/360 Calculator – Convert Sensitivity to cm/360"
+  description="Free CS2 cm/360 calculator. Convert sensitivity and DPI into cm per 360 instantly. Includes eDPI and sensitivity guidance."
+>
+  <h1>CS2 cm/360 Calculator</h1>
+  <p>Calculate your cm per 360 in Counter-Strike 2 instantly. Enter your sensitivity and mouse DPI below to find out how many centimetres of mouse movement it takes to complete a full 360-degree turn in game.</p>
+
+  <Calculator defaultSens={1.0} defaultDpi={800} />
+
+  <h2>What Is cm/360 in CS2?</h2>
+  <p>cm/360 stands for centimetres per 360 degrees. It measures the physical distance you need to move your mouse across your mousepad to perform one complete in-game rotation. If your cm/360 is 34.1, it means you need to move your mouse exactly 34.1 centimetres to turn a full circle in CS2. This measurement captures your true physical sensitivity in a way that raw sensitivity numbers cannot.</p>
+  <p>The cm/360 formula for CS2 is: cm/360 = 2.54 × 360 ÷ (sensitivity × DPI × 0.022). The 0.022 value is the CS2 yaw multiplier, which determines how many degrees the game rotates per unit of mouse input. This constant applies to all players regardless of their settings and is built into the Source 2 engine that powers CS2.</p>
+  <p>For example, a player using <a href={getPageUrl(800, 1.0)}>1.00 sensitivity at 800 DPI</a> has a cm/360 of approximately {formatCm360(1.0, 800)} cm. A player using <a href={getPageUrl(400, 2.0)}>2.00 sensitivity at 400 DPI</a> has a cm/360 of {formatCm360(2.0, 400)} cm. Despite completely different settings, both players move their mouse the same distance for the same turn because their effective sensitivity is identical.</p>
+
+  <h2>Why cm/360 Matters in CS2</h2>
+  <p>cm/360 is the most meaningful way to express your sensitivity in CS2 because it directly corresponds to physical reality. When you tell another player your cm/360, they instantly understand how far you move your mouse to turn. Sensitivity numbers like 1.20 or 2.50 mean nothing without knowing the DPI, but a cm/360 value is universal and immediately comparable between any two players regardless of their hardware.</p>
+  <p>Professional CS2 players and coaches use cm/360 as the standard measurement for discussing and comparing sensitivity settings. When a team analyst reviews player configurations, they look at cm/360 rather than raw sensitivity because it provides an apples-to-apples comparison. This is why the cs2 cm/360 calculator has become an essential tool for anyone serious about optimising their aim.</p>
+  <p>Understanding your cm/360 also helps you maintain consistent aim when switching mice, mouse pads, or DPI settings. If you know your target cm/360, you can calculate the exact sensitivity needed at any DPI to preserve your muscle memory. This is invaluable when upgrading hardware or troubleshooting aim issues after changing equipment.</p>
+
+  <h2>Why cm/360 Is Better Than Sensitivity Alone</h2>
+  <p>Raw sensitivity in CS2 is a multiplier that only makes sense in the context of your mouse DPI. A sensitivity of 1.50 at <a href="/400-dpi/">400 DPI</a> produces a cm/360 of {formatCm360(1.5, 400)} cm, while the same sensitivity of 1.50 at <a href="/1600-dpi/">1600 DPI</a> gives a cm/360 of just {formatCm360(1.5, 1600)} cm. These are completely different experiences despite the identical sensitivity number. The first is a slow, precise setup while the second is extremely fast.</p>
+  <p>cm/360 eliminates this confusion by measuring the physical outcome rather than the digital input. When someone says they play at 35 cm/360, you know exactly how far their mouse moves per rotation. It does not matter whether they achieve that with 0.65 sensitivity at 1600 DPI or 2.60 sensitivity at 400 DPI. The physical experience is identical.</p>
+  <p>This is also why eDPI (effective DPI) gained popularity as a comparison metric. eDPI equals sensitivity multiplied by DPI and provides a single number for comparison. However, cm/360 goes one step further by translating that number into a physical measurement you can literally measure with a ruler on your desk. Many players find cm/360 more intuitive because it directly answers the question: how far do I actually move my mouse?</p>
+
+  <h2>DPI vs Sensitivity: Understanding the Difference</h2>
+  <p>DPI (dots per inch) is a hardware setting on your mouse that determines how many digital counts the sensor reports per inch of physical movement. A mouse at 800 DPI reports 800 counts for every inch you move it. This is fixed by your mouse firmware or software and has nothing to do with CS2 settings.</p>
+  <p>Sensitivity is a software multiplier inside CS2 that scales those mouse counts into in-game rotation. A higher sensitivity makes each mouse count rotate the camera further. Together, DPI and sensitivity determine your cm/360. The formula chains these values: higher DPI or higher sensitivity both reduce your cm/360, meaning less mouse movement for the same turn.</p>
+  <p>Most professional CS2 players use <a href="/800-dpi/">800 DPI</a> or <a href="/400-dpi/">400 DPI</a>. These values became standard because early optical mice performed best at low DPI, and the habit stuck. Modern sensors handle higher DPI values like <a href="/1600-dpi/">1600</a> and <a href="/3200-dpi/">3200</a> perfectly well, and a growing number of players are adopting them for smoother tracking and better desktop usability.</p>
+
+  <h2>Typical Pro cm/360 Ranges</h2>
+  <p>The majority of professional CS2 players use a cm/360 between 25 and 45 centimetres, which falls in the balanced speed category. The average sits around 30 to 38 cm/360, corresponding roughly to an eDPI of 700 to 1000 at the standard 0.022 yaw rate.</p>
+  <p>Riflers typically cluster between 28 and 40 cm/360. This range provides enough precision for tap shooting and spray control while still allowing reasonable turn speed for checking angles and rotating between sites. Popular settings include <a href={getPageUrl(800, 1.0)}>800 DPI × 1.00 ({formatCm360(1.0, 800)} cm/360)</a> and <a href={getPageUrl(400, 2.2)}>400 DPI × 2.20 ({formatCm360(2.2, 400)} cm/360)</a>.</p>
+  <p>AWP players often use higher cm/360 values between 35 and 55 cm, preferring the added precision for holding angles and hitting flick shots with the scope. Entry fraggers lean toward lower cm/360 values between 22 and 35 cm to turn faster when pushing into sites. Check the full breakdown on the <a href="/cm360-chart/">cm/360 chart page</a>.</p>
+
+  <h2>How to Test Your cm/360 in CS2</h2>
+  <p>The simplest way to test your cm/360 is to place a piece of tape on your mousepad as a starting marker. Position your crosshair on a distinct landmark in game, such as a corner or sign. Move your mouse from the tape marker until you complete exactly one full rotation and your crosshair returns to the same landmark. Measure the distance your mouse traveled with a ruler or tape measure. That distance in centimetres is your cm/360.</p>
+  <p>Alternatively, use the calculator at the top of this page. Enter your exact CS2 sensitivity and DPI, and it instantly computes your cm/360 using the exact same formula the game engine uses. This mathematical approach is more precise than physical measurement and accounts for the exact 0.022 yaw value used by Source 2.</p>
+
+  <h3>Verifying Your Settings</h3>
+  <p>It is worth double-checking that your mouse is actually running at the DPI you think it is. Some mice default to a different DPI than expected, and some have DPI buttons that can be accidentally pressed during gameplay. Open your mouse manufacturer software and confirm the active DPI profile matches what you entered in the calculator.</p>
+
+  <h2>How to Optimise Your Aim Using cm/360</h2>
+  <p>Start by calculating your current cm/360 with the calculator above. Then evaluate whether your aim issues point to a speed or precision problem. If you consistently struggle to land headshots at medium to long range, your cm/360 may be too low, meaning your sensitivity is too high and small hand movements create large crosshair jumps. Consider increasing your cm/360 by lowering your sensitivity.</p>
+  <p>If you find yourself unable to turn quickly enough to respond to flanks or unable to clear angles efficiently during pushes, your cm/360 may be too high. This means you need a lot of mouse movement for basic turns, which slows your reactions. Try decreasing your cm/360 by raising your sensitivity slightly.</p>
+  <p>Make adjustments in small increments. Changing your cm/360 by 2 to 3 centimetres at a time allows your muscle memory to adapt without feeling completely foreign. Give each new setting at least a week of consistent play before deciding whether to adjust further. Drastic changes disrupt muscle memory and can make your aim temporarily worse even if the new setting is objectively better for you.</p>
+
+  <h2>Popular cm/360 Settings</h2>
+  <p>Browse specific cm/360 calculations for common DPI and sensitivity combinations:</p>
+
+  <h3>Popular at 800 DPI</h3>
+  <div class="sens-grid">
+    {[0.70, 0.80, 0.90, 1.00, 1.10, 1.20, 1.30, 1.50].map(s => (
+      <a href={getPageUrl(800, s)}>{formatSens(s)} sens → {formatCm360(s, 800)} cm</a>
+    ))}
+  </div>
+
+  <h3>Popular at 400 DPI</h3>
+  <div class="sens-grid">
+    {[1.50, 1.80, 2.00, 2.20, 2.50].map(s => (
+      <a href={getPageUrl(400, s)}>{formatSens(s)} sens → {formatCm360(s, 400)} cm</a>
+    ))}
+  </div>
+
+  <h3>Popular at 1600 DPI</h3>
+  <div class="sens-grid">
+    {[0.40, 0.50, 0.55, 0.60, 0.70, 0.80].map(s => (
+      <a href={getPageUrl(1600, s)}>{formatSens(s)} sens → {formatCm360(s, 1600)} cm</a>
+    ))}
+  </div>
+
+  <h3>Browse by DPI</h3>
+  <div class="sens-grid">
+    {DPI_VALUES.map(dpi => (
+      <a href={getHubUrl(dpi)}>All {dpi} DPI settings →</a>
+    ))}
+  </div>
+</Base>

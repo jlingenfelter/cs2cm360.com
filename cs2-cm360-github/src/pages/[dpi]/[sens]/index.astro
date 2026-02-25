@@ -1,0 +1,141 @@
+---
+import Base from '../../../layouts/Base.astro';
+import { DPI_VALUES, SENS_VALUES, calcCm360, calcEdpi, classifyCm360, classifyCm360Slug, formatSens, sensToSlug, formatCm360, getPageUrl, getHubUrl, getNearbySens, dpiSlug } from '../../../lib/data';
+
+export function getStaticPaths() {
+  const paths: any[] = [];
+  for (const dpi of DPI_VALUES) {
+    for (const sens of SENS_VALUES) {
+      paths.push({
+        params: {
+          dpi: dpiSlug(dpi),
+          sens: `${sensToSlug(sens)}-sens`,
+        },
+        props: { dpi, sens },
+      });
+    }
+  }
+  return paths;
+}
+
+const { dpi, sens } = Astro.props;
+const cm360 = calcCm360(sens, dpi);
+const cm360Str = cm360.toFixed(1);
+const edpi = calcEdpi(sens, dpi);
+const classification = classifyCm360(cm360);
+const classSlug = classifyCm360Slug(cm360);
+const sensStr = formatSens(sens);
+const nearbySens = getNearbySens(sens);
+const otherDpis = DPI_VALUES.filter(d => d !== dpi);
+
+const breadcrumbs = [
+  { label: 'Home', href: '/' },
+  { label: `${dpi} DPI`, href: getHubUrl(dpi) },
+  { label: `${sensStr} Sens` },
+];
+
+const speedDesc = classSlug === 'fast' ? 'fast and reactive' : classSlug === 'balanced' ? 'balanced and versatile' : 'slow and precise';
+const roleDesc = classSlug === 'fast' ? 'aggressive entry fraggers and close-range specialists who need rapid turns and instant reactions' : classSlug === 'balanced' ? 'riflers, support players, and all-round competitors who need both precision and mobility' : 'AWPers, anchor players, and precision-focused aimers who prioritise crosshair accuracy above all else';
+const padDesc = classSlug === 'fast' ? 'A standard mouse pad of 25 to 35 cm is sufficient at this speed since most movements are small wrist flicks. Wrist aiming dominates at fast cm/360 settings.' : classSlug === 'balanced' ? 'A standard gaming mouse pad of 35 to 45 cm is ideal for this cm/360 range. You will use a combination of arm and wrist aiming, with your arm handling large sweeps and your wrist providing fine adjustments.' : 'At this precision cm/360, you will need a large mouse pad of at least 45 cm wide. Arm aiming is essential, and your entire forearm should rest comfortably on the desk with room to make full sweeping movements.';
+---
+
+<Base
+  title={`CS2 cm360 Calculator – ${dpi} DPI ${sensStr} Sens (${cm360Str} cm/360)`}
+  description={`Calculate CS2 cm/360 for ${dpi} DPI and ${sensStr} sensitivity. cm/360 = ${cm360Str}. eDPI = ${edpi}. ${classification} classification. Includes explanation and comparison.`}
+  breadcrumbs={breadcrumbs}
+>
+  <h1>CS2 cm/360: {dpi} DPI × {sensStr} Sensitivity = {cm360Str} cm</h1>
+
+  <div class="stat-row">
+    <div class="stat-item">
+      <div class="stat-value">{sensStr}</div>
+      <div class="stat-label">Sensitivity</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-value">{dpi}</div>
+      <div class="stat-label">DPI</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-value">{cm360Str}</div>
+      <div class="stat-label">cm/360</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-value">{edpi}</div>
+      <div class="stat-label">eDPI</div>
+    </div>
+  </div>
+
+  <div class="card" style="text-align:center;margin-bottom:32px;">
+    <p style="margin-bottom:8px;font-size:14px;color:#6b7280;">Sensitivity Classification</p>
+    <span class={`classification class-${classSlug}`} style="font-size:18px;">{classification}</span>
+  </div>
+
+  <h2>What Does {cm360Str} cm/360 Mean in CS2?</h2>
+  <p>A cm/360 of {cm360Str} cm means you need to move your mouse exactly {cm360Str} centimetres across your mousepad to complete one full 360-degree rotation in CS2. This is achieved by using a sensitivity of {sensStr} combined with a mouse DPI of {dpi}. The formula is: 2.54 × 360 ÷ ({sensStr} × {dpi} × 0.022) = {cm360Str} cm/360. Your eDPI for this setting is {edpi}.</p>
+  <p>At {cm360Str} cm/360, your mouse movement feels {speedDesc}. This cm/360 is classified as {classification.toLowerCase()}, placing you within the range commonly used by {roleDesc}.</p>
+
+  <h2>How Fast Is {cm360Str} cm/360?</h2>
+  {classSlug === 'fast' ? (
+    <>
+      <p>At {cm360Str} cm per 360 degrees, your mouse moves quickly across the screen. You can complete a full rotation with a relatively small hand movement, and a 180-degree turn requires just {(cm360 / 2).toFixed(1)} cm of mouse travel. This speed gives you the ability to snap to targets rapidly and react to threats from any direction with minimal physical effort.</p>
+      <p>The trade-off of fast cm/360 is reduced precision at medium and long range. When you need less than 25 cm for a full turn, small hand tremors and micro-movements translate into noticeable crosshair jumps. Holding tight angles becomes more difficult because your crosshair tends to drift past the point you are trying to hold. Recoil control during extended sprays also requires more refined motor control at this speed.</p>
+      <p>Fast cm/360 settings reward players with exceptional mouse control who have built their muscle memory around quick movements. If you find yourself consistently overshooting targets or struggling with spray patterns, consider increasing your cm/360 by lowering your sensitivity slightly. A change of 0.05 sensitivity at {dpi} DPI will adjust your cm/360 by roughly {Math.abs(calcCm360(sens - 0.05, dpi) - cm360).toFixed(1)} cm.</p>
+    </>
+  ) : classSlug === 'balanced' ? (
+    <>
+      <p>At {cm360Str} cm per 360 degrees, your mouse moves at a moderate speed that most competitive players find comfortable and natural. A 180-degree turn requires about {(cm360 / 2).toFixed(1)} cm of mouse movement, which is achievable with a standard mouse pad and a combination of arm and wrist aiming.</p>
+      <p>Balanced cm/360 settings provide a practical compromise between turn speed and crosshair precision. You can make reasonably quick checks and rotations while still maintaining enough control for accurate headshot placement at medium range. This versatility is why the balanced zone between 25 and 45 cm is where the vast majority of professional CS2 players operate.</p>
+      <p>At {cm360Str} cm/360, you have room to adjust in either direction. If you want more precision for AWP play or holding long angles, lower your sensitivity by 0.05 to increase your cm/360. If you need faster turns for entry fragging or aggressive play, raise your sensitivity by 0.05 to decrease your cm/360. Small changes let you fine-tune without disrupting your muscle memory.</p>
+    </>
+  ) : (
+    <>
+      <p>At {cm360Str} cm per 360 degrees, your mouse moves slowly and deliberately. A full rotation requires {cm360Str} cm of physical mouse travel, and even a 90-degree turn needs approximately {(cm360 / 4).toFixed(1)} cm. This level of control gives you the finest possible crosshair precision, making it easier to place your crosshair on exact pixel positions.</p>
+      <p>Precision cm/360 settings excel at holding angles, landing one-tap headshots, and controlling recoil with surgical accuracy. Every millimetre of mouse movement creates a small, predictable in-game adjustment, which reduces aiming errors caused by hand tremors or rushed movements. Many professional AWPers operate in this range because the precision is essential for hitting one-shot kills consistently.</p>
+      <p>The trade-off is mobility. At {cm360Str} cm/360, turning quickly requires large arm movements and potentially lifting your mouse to reposition it. Close-range duels and situations where enemies appear from unexpected angles can feel sluggish. You will need a large mousepad of at least 45 cm wide and an arm-aiming technique to use precision cm/360 effectively.</p>
+    </>
+  )}
+
+  <h2>Who Should Use {cm360Str} cm/360?</h2>
+  <p>A cm/360 of {cm360Str} cm is best suited for {roleDesc}. If this setting feels natural to you and your aim is consistent, there is no reason to change. The most important factor in CS2 aim is comfort and consistency rather than hitting a specific number.</p>
+  <p>{padDesc}</p>
+
+  <h2>Equivalent Settings at Other DPI Values</h2>
+  <p>You can achieve a similar cm/360 at different hardware DPI settings by adjusting your in-game sensitivity:</p>
+  <div class="sens-grid">
+    {otherDpis.map(otherDpi => {
+      const equivSens = (2.54 * 360) / (cm360 * otherDpi * 0.022);
+      const equivSensRounded = Math.round(equivSens * 100) / 100;
+      const equivCm360 = calcCm360(equivSensRounded, otherDpi);
+      const matchingSens = SENS_VALUES.find(s => Math.abs(s - equivSensRounded) < 0.001);
+      return matchingSens ? (
+        <a href={getPageUrl(otherDpi, matchingSens)}>{otherDpi} DPI × {equivSensRounded.toFixed(2)} = {equivCm360.toFixed(1)} cm</a>
+      ) : (
+        <span class="card" style="text-align:center;padding:10px 14px;font-size:14px;">{otherDpi} DPI × {equivSensRounded.toFixed(2)} ≈ {equivCm360.toFixed(1)} cm</span>
+      );
+    })}
+  </div>
+
+  {nearbySens.length > 0 && (
+    <>
+      <h2>Nearby Sensitivity Settings at {dpi} DPI</h2>
+      <p>Explore sensitivities close to {sensStr} at {dpi} DPI:</p>
+      <div class="sens-grid">
+        {nearbySens.map(s => (
+          <a href={getPageUrl(dpi, s)}>{formatSens(s)} sens → {formatCm360(s, dpi)} cm/360</a>
+        ))}
+      </div>
+    </>
+  )}
+
+  <div class="link-section">
+    <h3>Browse More Settings</h3>
+    <div class="sens-grid">
+      <a href={getHubUrl(dpi)}>All {dpi} DPI settings →</a>
+      {otherDpis.map(d => (
+        <a href={getHubUrl(d)}>All {d} DPI settings →</a>
+      ))}
+      <a href="/cm360-chart/">cm/360 Chart →</a>
+      <a href="/">cm/360 Calculator →</a>
+    </div>
+  </div>
+</Base>

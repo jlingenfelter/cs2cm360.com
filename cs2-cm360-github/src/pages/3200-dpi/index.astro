@@ -1,0 +1,52 @@
+---
+import Base from '../../layouts/Base.astro';
+import Calculator from '../../components/Calculator.astro';
+import { SENS_VALUES, DPI_VALUES, formatSens, formatCm360, getPageUrl, getHubUrl } from '../../lib/data';
+
+const dpi = 3200;
+const breadcrumbs = [
+  { label: 'Home', href: '/' },
+  { label: '3200 DPI' },
+];
+---
+
+<Base
+  title="CS2 cm360 Calculator 3200 DPI – Sensitivity to cm/360 Chart"
+  description="Calculate your CS2 cm/360 at 3200 DPI. Full sensitivity chart from 0.40 to 2.50 with cm/360 values, classifications, and direct links to every setting."
+  breadcrumbs={breadcrumbs}
+>
+  <h1>CS2 cm/360 Calculator – 3200 DPI</h1>
+  <p>Calculate your cm per 360 at 3200 DPI using the calculator below. Browse the full sensitivity chart to find your exact setting and see the resulting cm/360.</p>
+
+  <Calculator defaultSens={0.40} defaultDpi={3200} />
+
+  <h2>3200 DPI Sensitivity to cm/360 Chart</h2>
+  <p>Every sensitivity from 0.40 to 2.50 at 3200 DPI with the resulting cm/360:</p>
+
+  <div class="sens-grid">
+    {SENS_VALUES.map(s => (
+      <a href={getPageUrl(dpi, s)}>
+        {formatSens(s)} sens → {formatCm360(s, dpi)} cm
+      </a>
+    ))}
+  </div>
+
+  <h2>Using 3200 DPI in CS2</h2>
+  <p>3200 DPI is the highest common DPI setting used by competitive CS2 players. While less popular than 800 or 400 DPI, it has a growing userbase among players who want the smoothest possible sensor tracking and a fast desktop cursor. Modern mouse sensors handle 3200 DPI exceptionally well, capturing an extremely high number of data points per inch.</p>
+  <p>The key characteristic of 3200 DPI is that even low in-game sensitivities produce fast cm/360 values. The lowest standard sensitivity of <a href={getPageUrl(3200, 0.40)}>0.40 gives a cm/360 of just {formatCm360(0.4, 3200)} cm</a>, which is in the fast turn speed category. To reach the balanced zone you would need sensitivities well below 0.40, which requires using console commands for custom values.</p>
+  <p>For this reason, 3200 DPI is best suited for players who are comfortable with lower cm/360 values and fast mouse speeds, or who use custom sub-0.40 sensitivities via the CS2 console. Players who prefer balanced or precision cm/360 values should consider <a href="/800-dpi/">800 DPI</a> or <a href="/400-dpi/">400 DPI</a>.</p>
+
+  <h3>Typical 3200 DPI Sensitivities</h3>
+  <p>Players at 3200 DPI with standard sensitivity values typically use <a href={getPageUrl(3200, 0.40)}>0.40</a> to <a href={getPageUrl(3200, 0.60)}>0.60</a> sensitivity, producing cm/360 values from {formatCm360(0.6, 3200)} to {formatCm360(0.4, 3200)} cm. These are all in the fast range, demanding excellent mouse control and refined muscle memory.</p>
+
+  <h2>Who Should Use 3200 DPI</h2>
+  <p>3200 DPI makes the most sense for players who run high DPI for productivity work, multi-monitor setups, or creative applications and do not want to switch DPI when launching CS2. It is also used by players who specifically prefer fast cm/360 settings and have developed their aim accordingly. Some mice have their native or optimal sensor DPI at 3200, and using the native DPI can provide the cleanest tracking signal.</p>
+
+  <h2>Other DPI Settings</h2>
+  <div class="sens-grid">
+    {DPI_VALUES.filter(d => d !== dpi).map(d => (
+      <a href={getHubUrl(d)}>View {d} DPI settings →</a>
+    ))}
+    <a href="/cm360-chart/">Full cm/360 Chart →</a>
+  </div>
+</Base>

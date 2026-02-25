@@ -1,0 +1,86 @@
+---
+import Base from '../layouts/Base.astro';
+import { DPI_VALUES, SENS_VALUES, calcCm360, calcEdpi, formatSens, formatCm360, getPageUrl, getHubUrl } from '../lib/data';
+
+const breadcrumbs = [
+  { label: 'Home', href: '/' },
+  { label: 'cm/360 Chart' },
+];
+---
+
+<Base
+  title="CS2 cm/360 Chart – Fast vs Balanced vs Precision Sensitivity"
+  description="CS2 cm360 chart showing fast, balanced and precision sensitivity ranges. Understand cm per 360 classifications and find the right sensitivity for your playstyle."
+  breadcrumbs={breadcrumbs}
+>
+  <h1>CS2 cm/360 Chart</h1>
+  <p>Use this CS2 cm/360 chart to understand how different centimetres-per-360 values are classified and what they mean for your gameplay. The chart below breaks cm/360 into three categories based on the ranges used by competitive and professional players.</p>
+
+  <div class="card">
+    <table>
+      <thead>
+        <tr>
+          <th>cm/360 Range</th>
+          <th>Classification</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>&lt; 25 cm</td>
+          <td><span class="classification class-fast">Fast Turn Speed</span></td>
+          <td>Quick turns, less precision at range</td>
+        </tr>
+        <tr>
+          <td>25 – 45 cm</td>
+          <td><span class="classification class-balanced">Balanced Speed</span></td>
+          <td>Versatile blend of speed and control</td>
+        </tr>
+        <tr>
+          <td>&gt; 45 cm</td>
+          <td><span class="classification class-precision">Precision Speed</span></td>
+          <td>Maximum accuracy, large mouse movements</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>How to Use the cm/360 Chart</h2>
+  <p>The cm/360 chart above divides sensitivity into three practical zones. Each zone represents a fundamentally different approach to aiming in CS2, and understanding where your settings fall helps you make informed decisions about whether to adjust.</p>
+  <p>First, calculate your cm/360 using the <a href="/">cm/360 calculator</a> on the homepage. Then find your value in the chart. If your cm/360 is below 25 centimetres, you are in the fast zone. Between 25 and 45, you are in the balanced zone. Above 45, you are in the precision zone. Each zone has distinct strengths and weaknesses that suit different playstyles and roles.</p>
+
+  <h2>Fast Turn Speed: Under 25 cm/360</h2>
+  <p>A cm/360 below 25 centimetres means you need less than 25 cm of mouse movement for a full rotation. This is considered fast sensitivity in CS2. Players at this speed can snap to targets instantly and complete 180-degree turns with small wrist flicks. Fast cm/360 values are common among aggressive players who prioritise reaction speed over pinpoint accuracy.</p>
+  <p>The trade-off is reduced precision at medium and long range. When your cm/360 is low, small hand movements create large crosshair jumps, making it harder to hold tight angles or land consistent headshots on distant targets. Spray control also becomes more difficult because the sensitivity amplifies every micro-movement during recoil compensation.</p>
+  <p>Fast cm/360 settings are relatively uncommon at the professional level. Most pros find that the precision sacrifice is too significant for competitive play. However, some exceptional entry fraggers and close-range specialists thrive at cm/360 values between 18 and 24 cm. These players have developed extraordinary mouse control through years of practice and have built their muscle memory around fast settings.</p>
+  <p>Examples of fast cm/360 settings include <a href={getPageUrl(800, 1.50)}>800 DPI × 1.50 ({formatCm360(1.5, 800)} cm)</a> and <a href={getPageUrl(1600, 0.80)}>1600 DPI × 0.80 ({formatCm360(0.8, 1600)} cm)</a>.</p>
+
+  <h2>Balanced Speed: 25 to 45 cm/360</h2>
+  <p>The balanced zone between 25 and 45 cm/360 is where the vast majority of competitive and professional CS2 players operate. This range offers a practical compromise between turn speed and crosshair precision. You can make reasonably quick 90 and 180 degree turns while still maintaining enough control for accurate headshot placement.</p>
+  <p>Within the balanced zone, there is a sweet spot between 30 and 40 cm/360 that covers most professional players. Riflers tend to cluster around 30 to 38 cm, support players around 32 to 42 cm, and AWPers at the higher end from 35 to 45 cm. The exact position within this range depends on personal preference, arm versus wrist aiming style, and the specific roles you play.</p>
+  <p>If you are unsure where to start, a cm/360 of about 34 to 36 cm is an excellent baseline. This corresponds to approximately <a href={getPageUrl(800, 1.0)}>1.00 sensitivity at 800 DPI</a> or <a href={getPageUrl(400, 2.0)}>2.00 at 400 DPI</a>. From there, you can adjust in small increments to find your personal sweet spot.</p>
+
+  <h2>Precision Speed: Over 45 cm/360</h2>
+  <p>A cm/360 above 45 centimetres means large mouse movements for every turn. This is the precision zone, favoured by players who prioritise absolute crosshair control above all else. At these settings, every millimetre of mouse movement translates to a tiny, controlled in-game adjustment, which makes it possible to place your crosshair with surgical accuracy.</p>
+  <p>Precision cm/360 values require a large mouse pad, typically 45 cm or wider, and an arm-aiming technique where your entire forearm slides across the desk. Wrist aiming is not viable at these speeds because the range of motion is too limited. Players in this zone need ergonomic desk setups that support extended arm movement without fatigue.</p>
+  <p>The disadvantage of precision cm/360 is speed. Turning to address a threat behind you requires lifting and repositioning your mouse, which takes time. In fast-paced situations like site retakes or close-range duels, precision players can feel sluggish compared to those using faster settings. This is why pure precision setups are less common among entry fraggers and more common among AWPers and passive players.</p>
+  <p>Examples include <a href={getPageUrl(400, 0.80)}>400 DPI × 0.80 ({formatCm360(0.8, 400)} cm)</a> and <a href={getPageUrl(800, 0.50)}>800 DPI × 0.50 ({formatCm360(0.5, 800)} cm)</a>.</p>
+
+  <h2>cm/360 Reference Tables</h2>
+  <p>Below are quick reference tables for each common DPI value showing the resulting cm/360 at various sensitivity settings.</p>
+
+  {DPI_VALUES.map(dpi => (
+    <div class="link-section">
+      <h3>{dpi} DPI cm/360 Values</h3>
+      <div class="sens-grid">
+        {[0.50, 0.75, 1.00, 1.25, 1.50, 2.00, 2.50].map(s => {
+          const sensVal = SENS_VALUES.find(v => Math.abs(v - s) < 0.001);
+          return sensVal !== undefined ? (
+            <a href={getPageUrl(dpi, sensVal)}>{formatSens(sensVal)} sens → {formatCm360(sensVal, dpi)} cm</a>
+          ) : null;
+        })}
+      </div>
+      <p><a href={getHubUrl(dpi)}>View all {dpi} DPI settings →</a></p>
+    </div>
+  ))}
+</Base>

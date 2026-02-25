@@ -1,0 +1,83 @@
+---
+interface Props {
+  defaultSens?: number;
+  defaultDpi?: number;
+}
+
+const { defaultSens = 1.0, defaultDpi = 800 } = Astro.props;
+---
+
+<div class="card" id="calculator">
+  <div class="calc-grid">
+    <div class="calc-field">
+      <label for="sens-input">Sensitivity</label>
+      <input type="number" id="sens-input" step="0.01" min="0.01" max="10" value={defaultSens.toFixed(2)} />
+    </div>
+    <div class="calc-field">
+      <label for="dpi-input">DPI</label>
+      <select id="dpi-input">
+        <option value="400" selected={defaultDpi === 400}>400</option>
+        <option value="800" selected={defaultDpi === 800}>800</option>
+        <option value="1600" selected={defaultDpi === 1600}>1600</option>
+        <option value="3200" selected={defaultDpi === 3200}>3200</option>
+      </select>
+    </div>
+  </div>
+  <div class="result-box">
+    <div class="cm360-label">cm per 360°</div>
+    <div class="cm360-value" id="cm360-result">–</div>
+    <div class="edpi-sub" id="edpi-result">eDPI: –</div>
+    <div class="classification" id="cm360-class">–</div>
+    <div class="share-link" id="share-link"></div>
+  </div>
+</div>
+
+<script define:vars={{ defaultSens, defaultDpi }}>
+  function calculate() {
+    const sens = parseFloat(document.getElementById('sens-input').value);
+    const dpi = parseInt(document.getElementById('dpi-input').value);
+    const cm360El = document.getElementById('cm360-result');
+    const edpiEl = document.getElementById('edpi-result');
+    const classEl = document.getElementById('cm360-class');
+    const shareEl = document.getElementById('share-link');
+
+    if (isNaN(sens) || isNaN(dpi) || sens <= 0) {
+      cm360El.textContent = '–';
+      edpiEl.textContent = 'eDPI: –';
+      classEl.textContent = '–';
+      classEl.className = 'classification';
+      shareEl.innerHTML = '';
+      return;
+    }
+
+    const cm360 = (2.54 * 360) / (sens * dpi * 0.022);
+    const edpi = Math.round(sens * dpi);
+
+    cm360El.textContent = cm360.toFixed(1);
+    edpiEl.textContent = 'eDPI: ' + edpi.toLocaleString();
+
+    let label, cls;
+    if (cm360 < 25) {
+      label = 'Fast Turn Speed';
+      cls = 'class-fast';
+    } else if (cm360 <= 45) {
+      label = 'Balanced Speed';
+      cls = 'class-balanced';
+    } else {
+      label = 'Precision Speed';
+      cls = 'class-precision';
+    }
+
+    classEl.textContent = label;
+    classEl.className = 'classification ' + cls;
+
+    // Generate share link
+    const sensSlug = sens.toFixed(2).replace('.', '-');
+    const url = '/' + dpi + '-dpi/' + sensSlug + '-sens/';
+    shareEl.innerHTML = 'Share: <a href="' + url + '">' + window.location.origin + url + '</a>';
+  }
+
+  document.getElementById('sens-input').addEventListener('input', calculate);
+  document.getElementById('dpi-input').addEventListener('change', calculate);
+  calculate();
+</script>

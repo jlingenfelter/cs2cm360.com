@@ -1,0 +1,52 @@
+---
+import Base from '../../layouts/Base.astro';
+import Calculator from '../../components/Calculator.astro';
+import { SENS_VALUES, DPI_VALUES, formatSens, formatCm360, getPageUrl, getHubUrl } from '../../lib/data';
+
+const dpi = 1600;
+const breadcrumbs = [
+  { label: 'Home', href: '/' },
+  { label: '1600 DPI' },
+];
+---
+
+<Base
+  title="CS2 cm360 Calculator 1600 DPI – Sensitivity to cm/360 Chart"
+  description="Calculate your CS2 cm/360 at 1600 DPI. Full sensitivity chart from 0.40 to 2.50 with cm/360 values, classifications, and direct links to every setting."
+  breadcrumbs={breadcrumbs}
+>
+  <h1>CS2 cm/360 Calculator – 1600 DPI</h1>
+  <p>Calculate your cm per 360 at 1600 DPI using the calculator below. Browse the full sensitivity chart to find your exact setting and see the resulting cm/360.</p>
+
+  <Calculator defaultSens={0.50} defaultDpi={1600} />
+
+  <h2>1600 DPI Sensitivity to cm/360 Chart</h2>
+  <p>Every sensitivity from 0.40 to 2.50 at 1600 DPI with the resulting cm/360:</p>
+
+  <div class="sens-grid">
+    {SENS_VALUES.map(s => (
+      <a href={getPageUrl(dpi, s)}>
+        {formatSens(s)} sens → {formatCm360(s, dpi)} cm
+      </a>
+    ))}
+  </div>
+
+  <h2>Why 1600 DPI Is Gaining Popularity</h2>
+  <p>1600 DPI has seen a significant rise in adoption among competitive CS2 players. Modern mouse sensors from PixArt, Razer, and other manufacturers handle 1600 DPI flawlessly, delivering clean and accurate tracking that matches or exceeds performance at lower DPI settings. The old concerns about smoothing or interpolation at higher DPI values no longer apply to current-generation sensors.</p>
+  <p>The primary advantage of 1600 DPI is a higher polling resolution. Your mouse reports more data points per inch of physical movement, which creates a marginally smoother tracking signal. While the difference is subtle, many players who switch from 800 to 1600 DPI describe their mouse as feeling slightly more responsive and fluid.</p>
+  <p>At 1600 DPI, competitive cm/360 values are achieved with very low in-game sensitivities. A cm/360 of {formatCm360(0.5, 1600)} cm requires just <a href={getPageUrl(1600, 0.50)}>0.50 sensitivity</a>. This means each 0.01 change in sensitivity produces a smaller change in cm/360 compared to lower DPI settings, giving you finer granularity when dialling in your perfect sensitivity.</p>
+
+  <h3>Typical 1600 DPI Sensitivities</h3>
+  <p>Competitive players at 1600 DPI typically use sensitivities between 0.40 and 0.75, producing cm/360 values from roughly {formatCm360(0.75, 1600)} to {formatCm360(0.4, 1600)} cm. The most popular range centres around <a href={getPageUrl(1600, 0.50)}>0.50</a> to <a href={getPageUrl(1600, 0.65)}>0.65</a> sensitivity. Players who prefer faster settings may go up to <a href={getPageUrl(1600, 0.80)}>0.80</a> or beyond.</p>
+
+  <h2>1600 DPI Desktop Experience</h2>
+  <p>One of the biggest practical benefits of 1600 DPI is an excellent Windows experience. Your desktop cursor moves at a natural, comfortable speed without any adjustments to Windows pointer settings. Productivity work, browsing, and creative applications all feel smooth. When you launch CS2, your low in-game sensitivity keeps your cm/360 in the competitive range.</p>
+
+  <h2>Other DPI Settings</h2>
+  <div class="sens-grid">
+    {DPI_VALUES.filter(d => d !== dpi).map(d => (
+      <a href={getHubUrl(d)}>View {d} DPI settings →</a>
+    ))}
+    <a href="/cm360-chart/">Full cm/360 Chart →</a>
+  </div>
+</Base>

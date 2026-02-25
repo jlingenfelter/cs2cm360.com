@@ -1,0 +1,52 @@
+---
+import Base from '../../layouts/Base.astro';
+import Calculator from '../../components/Calculator.astro';
+import { SENS_VALUES, DPI_VALUES, formatSens, formatCm360, getPageUrl, getHubUrl } from '../../lib/data';
+
+const dpi = 400;
+const breadcrumbs = [
+  { label: 'Home', href: '/' },
+  { label: '400 DPI' },
+];
+---
+
+<Base
+  title="CS2 cm360 Calculator 400 DPI – Sensitivity to cm/360 Chart"
+  description="Calculate your CS2 cm/360 at 400 DPI. Full sensitivity chart from 0.40 to 2.50 with cm/360 values, classifications, and direct links to every setting."
+  breadcrumbs={breadcrumbs}
+>
+  <h1>CS2 cm/360 Calculator – 400 DPI</h1>
+  <p>Calculate your cm per 360 at 400 DPI using the calculator below. Browse the full sensitivity chart to find your exact setting and see the resulting cm/360.</p>
+
+  <Calculator defaultSens={2.0} defaultDpi={400} />
+
+  <h2>400 DPI Sensitivity to cm/360 Chart</h2>
+  <p>Every sensitivity from 0.40 to 2.50 at 400 DPI with the resulting cm/360:</p>
+
+  <div class="sens-grid">
+    {SENS_VALUES.map(s => (
+      <a href={getPageUrl(dpi, s)}>
+        {formatSens(s)} sens → {formatCm360(s, dpi)} cm
+      </a>
+    ))}
+  </div>
+
+  <h2>Why Players Use 400 DPI in CS2</h2>
+  <p>400 DPI has deep roots in competitive Counter-Strike. It was the native DPI for many early optical mice that defined the CS 1.6 and CSS era, and countless veteran players carried this setting forward through every version of the game. Even in 2024 and beyond, a substantial portion of professional CS2 players continue to use 400 DPI out of habit, preference, or the belief that lower DPI provides a purer sensor signal.</p>
+  <p>At 400 DPI, the sensitivity values needed for competitive cm/360 ranges are higher than at 800 DPI. To achieve a cm/360 of {formatCm360(2.0, 400)} cm, you need <a href={getPageUrl(400, 2.0)}>2.00 sensitivity</a>. The competitive range typically spans from about <a href={getPageUrl(400, 1.50)}>1.50</a> to <a href={getPageUrl(400, 2.50)}>2.50</a> sensitivity, which produces cm/360 values from roughly {formatCm360(2.5, 400)} to {formatCm360(1.5, 400)} cm.</p>
+  <p>The main drawback of 400 DPI is the slow Windows cursor speed. Many players find it uncomfortable for everyday computer use, web browsing, and productivity tasks. This leads some to toggle between DPI profiles or adjust Windows pointer speed to compensate. If this annoys you, <a href="/800-dpi/">800 DPI</a> provides the same cm/360 with half the sensitivity value and a much more comfortable desktop experience.</p>
+
+  <h3>Typical 400 DPI Sensitivities</h3>
+  <p>Professional CS2 players at 400 DPI typically use sensitivities between 1.50 and 2.50. The sweet spot sits around <a href={getPageUrl(400, 2.0)}>2.00</a> to <a href={getPageUrl(400, 2.2)}>2.20</a> sensitivity, giving a cm/360 in the low to mid 30s. Classic settings like <a href={getPageUrl(400, 2.0)}>2.00 sensitivity ({formatCm360(2.0, 400)} cm)</a> remain extremely popular among veterans of the game.</p>
+
+  <h2>400 DPI vs 800 DPI</h2>
+  <p>A sensitivity of <a href={getPageUrl(400, 2.0)}>2.00 at 400 DPI</a> produces exactly the same cm/360 as <a href={getPageUrl(800, 1.0)}>1.00 at 800 DPI</a>. The gameplay experience is identical. The only differences are in Windows cursor speed and the raw sensitivity number you use. Choose whichever DPI feels most comfortable for your overall computer experience.</p>
+
+  <h2>Other DPI Settings</h2>
+  <div class="sens-grid">
+    {DPI_VALUES.filter(d => d !== dpi).map(d => (
+      <a href={getHubUrl(d)}>View {d} DPI settings →</a>
+    ))}
+    <a href="/cm360-chart/">Full cm/360 Chart →</a>
+  </div>
+</Base>
